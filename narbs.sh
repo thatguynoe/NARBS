@@ -224,6 +224,19 @@ sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 # Link /bin/sh to dash.
 ln -sfT dash /usr/bin/sh
 
+# Relink /bin/sh to dash after Bash updates.
+[ ! -f /usr/share/libalpm/hooks/dash.hook ] && printf '[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = bash
+
+[Action]
+Description = Re-pointing /bin/sh symlink to dash...
+When = PostTransaction
+Exec = /usr/bin/ln -sfT dash /usr/bin/sh
+Depends = dash' > /usr/share/libalpm/hooks/dash.hook
+
 # dbus UUID must be generated for Artix runit.
 dbus-uuidgen > /var/lib/dbus/machine-id
 

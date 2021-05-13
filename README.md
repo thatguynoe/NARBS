@@ -1,3 +1,11 @@
-### My NARBS Setup
+# Noe's Auto-Rice Bootstrapping Scripts (NARBS)
 
-I took the LARBS idea from [Luke Smith](https://github.com/LukeSmithxyz/LARBS) and modified it a bit to fit my personal likings.
+My NARBS config is heavily inspired by [Luke Smith's build](https://github.com/LukeSmithxyz/LARBS), which I strongly encourage you to check out for more info.
+
+## Installation
+
+```
+git clone https://github.com/thatguynoe/NARBS
+cd NARBS
+sh narbs.sh
+```

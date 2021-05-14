@@ -5,7 +5,6 @@ My NARBS config is heavily inspired by [Luke Smith's build](https://github.com/L
 ## Installation
 
 ```
-git clone https://github.com/thatguynoe/NARBS
-cd NARBS
+curl -O https://raw.githubusercontent.com/thatguynoe/NARBS/main/narbs.sh
 sh narbs.sh
 ```

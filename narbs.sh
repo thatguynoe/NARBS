@@ -192,7 +192,8 @@ grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy"
 grep -q "^deny = 0" /etc/security/faillock.conf || sed -i "s/^# deny = 3$/deny = 0/" /etc/security/faillock.conf
 
 # Get rid of that annoying wpa_supplicant message on tty.
-grep -q "^Exec=/usr/bin/wpa_supplicant -u -s" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service || sed -i "s/^Exec=\/usr\/bin\/wpa_supplicant -u$/Exec=\/usr\/bin\/wpa_supplicant -u -s/" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service
+grep -q "^Exec=/usr/bin/wpa_supplicant -us" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service ||
+    sed -i "s/^Exec=\/usr\/bin\/wpa_supplicant -u$/Exec=\/usr\/bin\/wpa_supplicant -us/" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service
 
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
@@ -210,7 +211,7 @@ yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 
 # Install the dotfiles in the user's home directory
 putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -f "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
+rm -f "/home/$name/README.md"
 # make git ignore deleted README.md file
 git update-index --assume-unchanged "/home/$name/README.md"
 

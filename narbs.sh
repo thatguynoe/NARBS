@@ -225,6 +225,11 @@ sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 # Create basic directories.
 sudo -u "$name" mkdir "/home/$name/Documents /home/$name/Downloads /home/$name/Music /home/$name/Pictures"
 
+# Start services on boot.
+ln -s /etc/runit/sv/cupsd /run/runit/service
+ln -s /etc/runit/sv/cronie /run/runit/service
+ln -s /etc/runit/sv/bluetoothd /run/runit/service
+
 # Link /bin/sh to dash.
 ln -sfT dash /usr/bin/sh
 

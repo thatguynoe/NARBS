@@ -222,6 +222,9 @@ systembeepoff
 chsh -s /bin/zsh "$name" >/dev/null 2>&1
 sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 
+# Create basic directories.
+sudo -u "$name" mkdir "/home/$name/Documents /home/$name/Downloads /home/$name/Music /home/$name/Pictures"
+
 # Link /bin/sh to dash.
 ln -sfT dash /usr/bin/sh
 

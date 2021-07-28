@@ -22,7 +22,7 @@ esac done
 
 installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
 
-error() { clear; printf "ERROR:\\n%s\\n" "$1" >&2; exit 1;}
+error() { echo "ERROR: $1" ; exit 1;}
 
 welcomemsg() { \
     dialog --title "Welcome!" --msgbox "Welcome to Noe's Auto-Rice Bootstrapping Script!\\n\\nThis script will automatically install a fully-featured Linux desktop, which I use as my main machine.\\n\\n-Noe" 10 60

@@ -269,6 +269,12 @@ EndSection' > /etc/X11/xorg.conf.d/30-synaptics.conf
 grep -q "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" /etc/conf.d/fluidsynth ||
     echo "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" >> /etc/conf.d/fluidsynth
 
+# This line, overwriting the `newperms` command above will allow the user to
+# run serveral important commands, `shutdown`, `reboot`, updating, etc. without
+# a password.
+newperms "%wheel ALL=(ALL) ALL #NARBS
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm"
+
 # Last message! Install complete!
 finalize
 clear

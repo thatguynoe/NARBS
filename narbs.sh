@@ -226,9 +226,9 @@ sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 sudo -u "$name" mkdir "/home/$name/Documents /home/$name/Downloads /home/$name/Music /home/$name/Pictures"
 
 # Start services on boot.
-ln -s /etc/runit/sv/cupsd /run/runit/service
-ln -s /etc/runit/sv/cronie /run/runit/service
-ln -s /etc/runit/sv/bluetoothd /run/runit/service
+for service in cupsd cronie bluetoothd; do
+    ln -s /etc/runit/sv/"$service" /run/runit/service
+done
 
 # Link /bin/sh to dash.
 ln -sfT dash /usr/bin/sh

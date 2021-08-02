@@ -226,7 +226,7 @@ sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 sudo -u "$name" mkdir "/home/$name/Documents /home/$name/Downloads /home/$name/Music /home/$name/Pictures"
 
 # Start services on boot.
-for service in cupsd cronie bluetoothd; do
+for service in cupsd cronie bluetoothd backlight; do
     ln -s /etc/runit/sv/"$service" /run/runit/service
 done
 

@@ -223,7 +223,7 @@ chsh -s /bin/zsh "$name" >/dev/null 2>&1
 sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 
 # Create basic directories.
-sudo -u "$name" mkdir "/home/$name/Documents /home/$name/Downloads /home/$name/Music /home/$name/Pictures"
+sudo -u "$name" mkdir "/home/$name/Documents" "/home/$name/Downloads" "/home/$name/Pictures"
 
 # Start services on boot.
 for service in cupsd cronie bluetoothd backlight; do

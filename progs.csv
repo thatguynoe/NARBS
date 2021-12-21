@@ -70,6 +70,8 @@ G,https://github.com/thatguynoe/dmenu.git,"runs commands and provides a UI for s
 G,https://github.com/thatguynoe/st.git,"is my custom build of suckless's terminal emulator."
 G,https://github.com/thatguynoe/dwm.git,"is the window manager."
 G,https://github.com/thatguynoe/nsxiv.git,"is a minimalist image viewer."
+,imlib2,"is a nsxiv dependency."
+,libexif,"is a nsxiv dependency."
 A,mutt-wizard-git,"is a light-weight terminal-based email system."
 A,pam-gnupg,"unlocks GPG keys on login."
 ,slock,"allows you to lock your computer, and quickly unlock with your password."

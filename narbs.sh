@@ -118,13 +118,15 @@ manualinstall() {
     # Should be run after repodir is created and var is set.
     whiptail --infobox "Installing \"$1\", an AUR helper..." 7 50
     sudo -u "$name" mkdir -p "$repodir/$1"
-    sudo -u "$name" git clone --depth 1 "https://aur.archlinux.org/$1.git" "$repodir/$1" >/dev/null 2>&1 ||
+    sudo -u "$name" git -C "$repodir" clone --depth 1 --single-branch \
+        --no-tags -q "https://aur.archlinux.org/$1.git" "$repodir/$1" ||
         {
             cd "$repodir/$1" || return 1
-            sudo -u "$name" git pull --force origin master
+            sudo -u "$name" git pull --force origin main
         }
-    cd "$repodir/$1"
-    sudo -u "$name" -D "$repodir/$1" makepkg --noconfirm -si >/dev/null 2>&1 || return 1
+    cd "$repodir/$1" || exit 1
+    sudo -u "$name" -D "$repodir/$1" \
+        makepkg --noconfirm -si >/dev/null 2>&1 || return 1
 }
 
 maininstall() {
@@ -187,8 +189,10 @@ putgitrepo() {
     [ -z "$3" ] && branch="main" || branch="$repobranch"
     dir=$(mktemp -d)
     [ ! -d "$2" ] && mkdir -p "$2"
-    chown -R "$name":wheel "$dir" "$2"
-    sudo -u "$name" git clone --recursive -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1
+    chown "$name":wheel "$dir" "$2"
+    sudo -u "$name" git -C "$repodir" clone --depth 1 \
+        --single-branch --no-tags -q --recursive -b "$branch" \
+        --recurse-submodules "$1" "$dir"
     sudo -u "$name" cp -rfT "$dir" "$2"
 }
 
@@ -267,11 +271,11 @@ whiptail --title "NARBS Installation" \
 pacman -Qs libxft-git ||
     yes | sudo -u "$name" $aurhelper -S libxft-git >/dev/null 2>&1
 
-# Install the dotfiles in the user's home directory
+# Install the dotfiles in the user's home directory, but remove .git dir and
+# other unnecessary files.
 putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -f "/home/$name/README.md"
-# make git ignore deleted README.md file
-git update-index --assume-unchanged "/home/$name/README.md"
+rm -rf "/home/$name/.git/" "/home/$name/README.md"
+
 
 # Most important command! Get rid of the beep!
 rmmod pcspkr

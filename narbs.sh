@@ -323,10 +323,6 @@ esac' >/etc/NetworkManager/dispatcher.d/09-timezone && chmod +x /etc/NetworkMana
         Option "MaxTapTime" "125"
 EndSection' >/etc/X11/xorg.conf.d/30-synaptics.conf
 
-# Fix fluidsynth/pulseaudio issue.
-grep -q "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" /etc/conf.d/fluidsynth ||
-    echo "OTHER_OPTS='-a pulseaudio -m alsa_seq -r 48000'" >>/etc/conf.d/fluidsynth
-
 # This line, overwriting the `newperms` command above will allow the user to
 # run serveral important commands, `shutdown`, `reboot`, updating, etc. without
 # a password.

@@ -113,11 +113,6 @@ Include = /etc/pacman.d/mirrorlist-arch" >>/etc/pacman.conf
     esac
 }
 
-newperms() { # Set special sudoers settings for install (or after).
-    sed -i "/#NARBS/d" /etc/sudoers
-    echo "$* #NARBS" >>/etc/sudoers
-}
-
 manualinstall() {
     # Installs $1 manually. Used only for AUR helper here.
     # Should be run after repodir is created and var is set.
@@ -197,10 +192,6 @@ putgitrepo() {
     sudo -u "$name" cp -rfT "$dir" "$2"
 }
 
-systembeepoff() {
-    dialog --infobox "Getting rid of that retarded error beep sound..." 10 50
-    rmmod pcspkr
-    echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 }
 
 finalize() {
@@ -248,9 +239,10 @@ adduserandpass || error "Error adding username and/or password."
 
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers # Just in case
 
-# Allow the user to run sudo without password. Since AUR programs must be
-# installed in a fakeroot environment, this is required for all builds with AUR.
-newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
+# Allow user to run sudo without password. Since AUR programs must be installed
+# in a fakeroot environment, this is required for all builds with AUR.
+trap 'rm -f /etc/sudoers.d/narbs-temp' HUP INT QUIT TERM PWR EXIT
+echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/narbs-temp
 
 # Make pacman colorful, add eye candy on the progress bar, and enable concurrent downloads.
 sed -i "s/^#ParallelDownloads.*$/ParallelDownloads = 5/;s/^#Color$/Color/" /etc/pacman.conf
@@ -282,7 +274,8 @@ rm -f "/home/$name/README.md"
 git update-index --assume-unchanged "/home/$name/README.md"
 
 # Most important command! Get rid of the beep!
-systembeepoff
+rmmod pcspkr
+echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
 
 # Make zsh the default shell for the user.
 chsh -s /bin/zsh "$name" >/dev/null 2>&1
@@ -340,11 +333,10 @@ esac' >/etc/NetworkManager/dispatcher.d/09-timezone && chmod +x /etc/NetworkMana
         Option "MaxTapTime" "125"
 EndSection' >/etc/X11/xorg.conf.d/30-synaptics.conf
 
-# This line, overwriting the `newperms` command above will allow the user to
-# run serveral important commands, `shutdown`, `reboot`, updating, etc. without
-# a password.
-newperms "%wheel ALL=(ALL) ALL #NARBS
-%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm"
+# Allow wheel users to sudo with password and allow several system commands
+# (like `shutdown` to run without password).
+echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-narbs-wheel-can-sudo
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm" >/etc/sudoers.d/01-narbs-cmds-without-password
 
 # Last message! Install complete!
 finalize

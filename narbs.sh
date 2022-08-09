@@ -25,7 +25,8 @@ installpkg() {
 }
 
 error() {
-    echo "ERROR: $1"
+    # Log to stderr and exit with failure.
+    printf "%s\n" "$1" >&2
     exit 1
 }
 

@@ -276,7 +276,7 @@ pacman -Qs libxft-git ||
 # Install the dotfiles in the user's home directory, but remove .git dir and
 # other unnecessary files.
 putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -rf "/home/$name/.git/" "/home/$name/README.md"
+rm -rf "/home/$name/.git/" "/home/$name/README.md" "/home/$name/LICENSE"
 
 # Install vim plugins if not already present.
 [ ! -f "/home/$name/.config/nvim/autoload/plug.vim" ] && vimplugininstall

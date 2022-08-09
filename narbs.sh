@@ -20,7 +20,9 @@ while getopts ":a:r:b:p:h" o; do case "${o}" in
 
 ### FUNCTIONS ###
 
-installpkg() { pacman --noconfirm --needed -S "$1" >/dev/null 2>&1; }
+installpkg() {
+    pacman --noconfirm --needed -S "$1" >/dev/null 2>&1
+}
 
 error() {
     echo "ERROR: $1"
@@ -104,7 +106,8 @@ newperms() { # Set special sudoers settings for install (or after).
     echo "$* #NARBS" >>/etc/sudoers
 }
 
-manualinstall() { # Installs $1 manually. Used only for AUR helper here.
+manualinstall() {
+    # Installs $1 manually. Used only for AUR helper here.
     # Should be run after repodir is created and var is set.
     whiptail --infobox "Installing \"$1\", an AUR helper..." 7 50
     sudo -u "$name" mkdir -p "$repodir/$1"
@@ -215,7 +218,8 @@ preinstallmsg || error "User exited."
 ### The rest of the script requires no user input.
 
 # Refresh Arch keyrings.
-refreshkeys || error "Error automatically refreshing Arch keyring. Consider doing so manually."
+refreshkeys ||
+    error "Error automatically refreshing Arch keyring. Consider doing so manually."
 
 for x in curl base-devel git ntp zsh; do
     whiptail --title "NARBS Installation" \

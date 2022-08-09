@@ -225,10 +225,6 @@ grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy"
 # Disable login lockout.
 grep -q "^deny = 0" /etc/security/faillock.conf || sed -i "s/^# deny = 3$/deny = 0/" /etc/security/faillock.conf
 
-# Get rid of that annoying wpa_supplicant message on tty.
-grep -q "^Exec=/usr/bin/wpa_supplicant -us" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service ||
-    sed -i "s/^Exec=\/usr\/bin\/wpa_supplicant -u$/Exec=\/usr\/bin\/wpa_supplicant -us/" /usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service
-
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 

@@ -127,7 +127,8 @@ maininstall() {
 }
 
 gitmakeinstall() {
-    progname="$(basename "$1" .git)"
+    progname="${1##*/}"
+    progname="${progname%.git}"
     dir="$repodir/$progname"
     whiptail --title "NARBS Installation" \
         --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $2" 8 70

@@ -261,6 +261,15 @@ Depends = dash' > /usr/share/libalpm/hooks/dash.hook
 # dbus UUID must be generated for Artix runit.
 dbus-uuidgen > /var/lib/dbus/machine-id
 
+# Automatic timezone detection through a WIFI connection.
+[ ! -f /etc/NetworkManager/dispatcher.d/09-timezone ] && printf '#!/bin/sh
+
+case "$2" in
+    up)
+        ln -sf /usr/share/zoneinfo/"$(curl -s --fail https://ipapi.co/timezone)" /etc/localtime
+    ;;
+esac' >/etc/NetworkManager/dispatcher.d/09-timezone && chmod +x /etc/NetworkManager/dispatcher.d/09-timezone
+
 # Tap to click (and more)
 [ ! -f /etc/X11/xorg.conf.d/30-synaptics.conf ] && printf 'Section "InputClass"
     Identifier "libinput touchpad catchall"

@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Noe's Auto Rice Boostrapping Script (NARBS)
 # Stolen from and heavily inspired by Luke Smith <luke@lukesmith.xyz>
 
@@ -168,12 +169,14 @@ pipinstall() {
 }
 
 installationloop() {
-    ([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed '/^#/d' >/tmp/progs.csv
+    ([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) ||
+        curl -Ls "$progsfile" | sed '/^#/d' >/tmp/progs.csv
     total=$(wc -l </tmp/progs.csv)
     aurinstalled=$(pacman -Qqm)
     while IFS=, read -r tag program comment; do
         n=$((n + 1))
-        echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
+        echo "$comment" | grep -q "^\".*\"$" &&
+            comment="$(echo "$comment" | sed -E "s/(^\"|\"$)//g")"
         case "$tag" in
         "A") aurinstall "$program" "$comment" ;;
         "G") gitmakeinstall "$program" "$comment" ;;

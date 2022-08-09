@@ -255,9 +255,10 @@ adduserandpass || error "Error adding username and/or password."
 trap 'rm -f /etc/sudoers.d/narbs-temp' HUP INT QUIT TERM PWR EXIT
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/narbs-temp
 
-# Make pacman colorful, add eye candy on the progress bar, and enable concurrent downloads.
-sed -i "s/^#ParallelDownloads.*$/ParallelDownloads = 5/;s/^#Color$/Color/" /etc/pacman.conf
+# Make pacman colorful, add eye candy on the progress bar, and enable
+# concurrent downloads.
 grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
+sed -Ei "s/^#(ParallelDownloads).*/\1 = 5/;/^#Color$/s/#//" /etc/pacman.conf
 
 # Disable login lockout.
 grep -q "^deny = 0" /etc/security/faillock.conf || sed -i "s/^# deny = 3$/deny = 0/" /etc/security/faillock.conf

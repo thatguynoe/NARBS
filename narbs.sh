@@ -320,9 +320,9 @@ dbus-uuidgen >/var/lib/dbus/machine-id
 [ ! -f /etc/NetworkManager/dispatcher.d/09-timezone ] && printf '#!/bin/sh
 
 case "$2" in
-    up)
-        ln -sf /usr/share/zoneinfo/"$(curl -s --fail https://ipapi.co/timezone)" /etc/localtime
-    ;;
+up)
+    ln -sf /usr/share/zoneinfo/"$(curl -s --fail https://ipapi.co/timezone)" /etc/localtime
+;;
 esac' >/etc/NetworkManager/dispatcher.d/09-timezone && chmod +x /etc/NetworkManager/dispatcher.d/09-timezone
 
 # Tap to click (and more)

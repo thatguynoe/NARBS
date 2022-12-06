@@ -313,6 +313,19 @@ When = PostTransaction
 Exec = /usr/bin/ln -sfT dash /usr/bin/sh
 Depends = dash' >/usr/share/libalpm/hooks/dash.hook
 
+# Clean pacman cache after any package operation.
+[ ! -f /usr/share/libalpm/hooks/paccache.hook ] && printf '[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Target = *
+
+[Action]
+Description = Cleaning pacman cache...
+When = PostTransaction
+Exec = /usr/bin/paccache -r' >/usr/share/libalpm/hooks/paccache.hook
+
 # dbus UUID must be generated for Artix runit.
 dbus-uuidgen >/var/lib/dbus/machine-id
 

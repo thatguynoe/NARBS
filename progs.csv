@@ -4,6 +4,7 @@
 ,xorg-xinit,"starts the graphical server."
 ,polkit,"manages user policies."
 A,otf-san-francisco-mono,"provides a pretty, monospaced font."
+A,vscode-codicons-git,"provides the icon font for Visual Studio Code."
 A,lf-bin,"is an extensive terminal file manager that everyone likes."
 ,ueberzug,"can display images in the command line."
 ,arandr,"is a UI for screen adjustment."

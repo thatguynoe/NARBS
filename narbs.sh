@@ -75,37 +75,38 @@ adduserandpass() {
 }
 
 refreshkeys() {
-	case "$(readlink -f /sbin/init)" in
-	*systemd*)
-		whiptail --infobox "Refreshing Arch Keyring..." 7 40
-		pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
-		;;
-	*)
-		whiptail --infobox "Enabling Arch Repositories for more a more extensive software collection..." 7 40
-		pacman --noconfirm --needed -S \
-			artix-keyring artix-archlinux-support >/dev/null 2>&1
-		grep -q "^\[extra\]" /etc/pacman.conf ||
-			echo "[extra]
+    case "$(readlink -f /sbin/init)" in
+    *systemd*)
+        whiptail --infobox "Refreshing Arch Keyring..." 7 40
+        pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
+        ;;
+    *)
+        whiptail --infobox "Enabling Arch Repositories for more a more extensive software collection..." 7 40
+        pacman --noconfirm --needed -S \
+            artix-keyring artix-archlinux-support >/dev/null 2>&1
+        grep -q "^\[extra\]" /etc/pacman.conf ||
+            echo "[extra]
 Include = /etc/pacman.d/mirrorlist-arch" >>/etc/pacman.conf
-		pacman -Sy --noconfirm >/dev/null 2>&1
-		pacman-key --populate archlinux >/dev/null 2>&1
-		;;
-	esac
+        pacman -Sy --noconfirm >/dev/null 2>&1
+        pacman-key --populate archlinux >/dev/null 2>&1
+        ;;
+    esac
 }
 
 manualinstall() {
     # Installs $1 manually. Used only for AUR helper here.
     # Should be run after repodir is created and var is set.
-    whiptail --infobox "Installing \"$1\", an AUR helper..." 7 50
+    pacman -Qq "$1" && return 0
+    whiptail --infobox "Installing \"$1\" manually." 7 50
     sudo -u "$name" mkdir -p "$repodir/$1"
     sudo -u "$name" git -C "$repodir" clone --depth 1 --single-branch \
         --no-tags -q "https://aur.archlinux.org/$1.git" "$repodir/$1" ||
         {
             cd "$repodir/$1" || return 1
-            sudo -u "$name" git pull --force origin main
+            sudo -u "$name" git pull --force origin master
         }
     cd "$repodir/$1" || exit 1
-    sudo -u "$name" -D "$repodir/$1" \
+    sudo -u "$name" \
         makepkg --noconfirm -si >/dev/null 2>&1 || return 1
 }
 

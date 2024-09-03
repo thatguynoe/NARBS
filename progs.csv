@@ -2,6 +2,7 @@
 ,xorg-server,"is the graphical server. This first one may take a while as it pulls many other dependencies first on clean installs."
 ,xorg-xwininfo,"allows querying information about windows."
 ,xorg-xinit,"starts the graphical server."
+,xorg-xset,"utility for configuring and ajusting X server"
 ,polkit,"manages user policies."
 A,otf-san-francisco-mono,"provides a pretty, monospaced font."
 A,vscode-codicons-git,"provides the icon font for Visual Studio Code."

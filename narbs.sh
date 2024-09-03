@@ -236,7 +236,8 @@ adduserandpass || error "Error adding username and/or password."
 # Allow user to run sudo without password. Since AUR programs must be installed
 # in a fakeroot environment, this is required for all builds with AUR.
 trap 'rm -f /etc/sudoers.d/narbs-temp' HUP INT QUIT TERM PWR EXIT
-echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/narbs-temp
+echo "%wheel ALL=(ALL) NOPASSWD: ALL
+Defaults:%wheel,root runcwd=*" >/etc/sudoers.d/narbs-temp
 
 # Make pacman colorful, add eye candy on the progress bar, and enable
 # concurrent downloads.
@@ -338,6 +339,9 @@ echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-narbs-wheel-can-sudo
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syuw --noconfirm" >/etc/sudoers.d/01-narbs-cmds-without-password
 mkdir -p /etc/sysctl.d
 echo "kernel.dmesg_restrict = 0" > /etc/sysctl.d/dmesg.conf
+
+# Cleanup
+rm -f /etc/sudoers.d/narbs-temp
 
 # Last message! Install complete!
 finalize

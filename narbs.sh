@@ -346,4 +346,3 @@ rm -f /etc/sudoers.d/narbs-temp
 
 # Last message! Install complete!
 finalize
-clear

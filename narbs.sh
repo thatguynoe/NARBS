@@ -333,6 +333,12 @@ dbus-uuidgen >/var/lib/dbus/machine-id
         Option "MaxTapTime" "125"
 EndSection' >/etc/X11/xorg.conf.d/30-synaptics.conf
 
+# Update audio when a bluetooth device connects or disconnects.
+[ ! -f /etc/udev/rules.d/99-update-audio-blutooth.rules ] && printf '# Update audio when a bluetooth device connects or disconnects.
+ACTION=="add", SUBSYSTEM=="bluetooth", RUN+="/home/$name/.local/bin/updateaudio"
+ACTION=="remove", SUBSYSTEM=="bluetooth", RUN+="/home/$name/.local/bin/updateaudio"' >/etc/udev/rules.d/99-update-audio-blutooth.rules
+sed -i 's/\$name/'"$name"'/' /etc/udev/rules.d/99-update-audio-blutooth.rules
+
 # Allow wheel users to sudo with password and allow several system commands
 # (like `shutdown` to run without password).
 echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-narbs-wheel-can-sudo
